@@ -42,7 +42,7 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c*
 	$(CC) $(COBJFLAGS) -o $@ $<
 
 $(OBJ_DEBUG_PATH)/%.o: $(SRC_PATH)/%.c*
-	$(CC) $(COBJFLAGS) -o $@ $<
+	$(CC) $(COBJFLAGS) $(DBGFLAGS) -o $@ $<
 
 $(DBG_PATH)/%.o: $(SRC_PATH)/%.c*
 	$(CC) $(COBJFLAGS) $(DBGFLAGS) -o $@ $<

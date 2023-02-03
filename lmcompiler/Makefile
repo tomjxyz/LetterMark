@@ -32,7 +32,7 @@ CLEAN_LIST := $(TARGET) \
 			  $(DISTCLEAN_LIST)
 
 # default rule
-default: makedir debug
+all: makedir debug
 
 # non-phony targets
 $(TARGET): $(OBJ)

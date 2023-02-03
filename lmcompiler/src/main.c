@@ -2,6 +2,7 @@
 #include <argp.h>
 
 #include "globals.h"
+#include "../../liblm/include/liblm.h"
 
 typedef struct arguments
 {
@@ -49,6 +50,8 @@ int main(int argc, char **argv)
 	args.config_file = NULL;
 
 	argp_parse(&argparse, argc, argv, 0, 0, &args);
+
+    hello_world();
 
 	return 0;
 }

@@ -3,7 +3,7 @@
 
 # tool macros
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -iquote../../liblm/include
 DBGFLAGS=-g
 COBJFLAGS := $(CFLAGS) -c
 
@@ -29,14 +29,21 @@ DISTCLEAN_LIST := $(OBJ) \
                   $(OBJ_DEBUG)
 CLEAN_LIST := $(TARGET) \
 			  $(TARGET_DEBUG) \
-			  $(DISTCLEAN_LIST)
+			  $(DISTCLEAN_LIST) \
+			  ../liblm/src/liblm.o \
+			  ../liblm/liblm.a
+
+LDFLAGS = -L../liblm -llm
 
 # default rule
-all: makedir debug
+all: makedir makelib debug
 
 # non-phony targets
 $(TARGET): $(OBJ)
-	$(CC) -o $@ $(OBJ) $(CFLAGS)
+	$(CC) -o $@ $(OBJ) $(CFLAGS) $(LDFLAGS)
+
+$(TARGET_DEBUG): $(OBJ_DEBUG)
+	$(CC) $(LDFLAGS) $(CFLAGS) $(DBGFLAGS) $(OBJ_DEBUG) -o $@ $(LDFLAGS)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c*
 	$(CC) $(COBJFLAGS) -o $@ $<
@@ -47,13 +54,14 @@ $(OBJ_DEBUG_PATH)/%.o: $(SRC_PATH)/%.c*
 $(DBG_PATH)/%.o: $(SRC_PATH)/%.c*
 	$(CC) $(COBJFLAGS) $(DBGFLAGS) -o $@ $<
 
-$(TARGET_DEBUG): $(OBJ_DEBUG)
-	$(CC) $(CFLAGS) $(DBGFLAGS) $(OBJ_DEBUG) -o $@
-
 # phony rules
 .PHONY: makedir
 makedir:
 	@mkdir -p $(BIN_PATH) $(OBJ_PATH) $(OBJ_DEBUG_PATH) $(DBG_PATH)
+
+.PHONY: makelib
+makelib:
+	@cd ../liblm && make
 
 .PHONY: release
 release: $(TARGET)

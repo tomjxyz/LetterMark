@@ -1,0 +1,5 @@
+.idea/
+lmcompiler/bin/
+lmcompiler/build/
+liblm/src/*.o
+liblm/liblm.a

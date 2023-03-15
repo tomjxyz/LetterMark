@@ -38,3 +38,23 @@ button {
     padding-left: 10px;
     background-color: #fff;
 }
+.render span,
+.render b,
+.render i,
+.render p {
+    display: block;
+}
+
+@media screen and (max-width: 600px) {
+    .split-screen {
+        flex-direction: column;
+    }
+    .input-area {
+        height: 50%;
+        order: 2;
+    }
+    .render {
+        height: 50%;
+        order: 1;
+    }
+}

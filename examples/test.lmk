@@ -3,8 +3,6 @@
 This is a note written in lettermark, a markup language designed for taking
 notes quickly.
 
-New paragraphs can be created with a blank line.
-
 The parsing program (lmcomp) quickly takes inputs like this, and turns them into
 PDFs, with many formatting options.
 

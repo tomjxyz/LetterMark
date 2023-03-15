@@ -41,7 +41,7 @@ function render() {
         {
             if (line === "")
             {
-                elm = document.createElement('p');
+                elm = document.createElement('br');
             }
             else 
             {

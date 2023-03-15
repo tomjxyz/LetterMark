@@ -58,3 +58,9 @@ button {
         order: 1;
     }
 }
+
+@media print {
+    .input-area {
+        display: none;
+    }
+}

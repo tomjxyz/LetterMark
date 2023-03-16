@@ -37,11 +37,13 @@ button {
     flex: 1;
     padding-left: 10px;
     background-color: #fff;
+    overflow-y: scroll;
 }
 .render span,
 .render b,
 .render i,
-.render p {
+.render p,
+.render a{
     display: block;
 }
 

@@ -1,5 +1,7 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <argp.h>
+#include <hpdf.h>
 
 #include "globals.h"
 #include "../../liblm/include/liblm.h"
@@ -42,6 +44,37 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 
 static struct argp argparse = {options, parse_opt, args_doc, doc};
 
+int read_file(const char *fn, char **content)
+{
+	FILE *file = fopen(fn, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    *content = (char *)malloc(file_size + 1);
+    if (*content == NULL) {
+        perror("Error allocating memory for file content");
+        fclose(file);
+        return 2;
+    }
+
+    size_t bytes_read = fread(*content, 1, file_size, file);
+    if (bytes_read != file_size) {
+        perror("Error reading file content");
+        fclose(file);
+        return 3;
+    }
+
+    (*content)[file_size] = '\0';
+    fclose(file);
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
 	// Default state
@@ -51,7 +84,10 @@ int main(int argc, char **argv)
 
 	argp_parse(&argparse, argc, argv, 0, 0, &args);
 
-    hello_world();
+	char *content;
+	read_file(args.np_args[0], &content);
+
+    lm_compile(content, args.np_args[1]);
 
 	return 0;
 }

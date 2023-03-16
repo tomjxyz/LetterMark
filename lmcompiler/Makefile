@@ -3,7 +3,7 @@
 
 # tool macros
 CC=gcc
-CFLAGS=-Wall -iquote../../liblm/include
+CFLAGS=-Wall -iquote../../liblm/include -lhpdf
 DBGFLAGS=-g
 COBJFLAGS := $(CFLAGS) -c
 

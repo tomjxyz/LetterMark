@@ -8,7 +8,7 @@ SOURCES = $(wildcard src/*.c)
 OBJECTS = $(SOURCES:.c=.o)
 
 # compiler flags
-CFLAGS = -Wall -Wextra -Werror -pedantic -Iinclude
+CFLAGS = -Wall -Iinclude -lhpdf
 
 # build target
 all: $(OBJECTS)

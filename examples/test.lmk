@@ -6,5 +6,8 @@ notes quickly.
 The parsing program (lmcomp) quickly takes inputs like this, and turns them into
 PDFs, with many formatting options.
 
+.b This line is bold
+.i This line is italic
+
 Here is a link to the repo:
 .a https://github.com/tomjxyz/LetterMark

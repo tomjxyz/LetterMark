@@ -1,5 +1,7 @@
 #include <argp.h>
 
+#define MAX_FILE_SIZE 1000000
+
 const char *argp_program_version = "lmcomp 0.1";
 const char *argp_program_bug_address = "<admin@tomj.xyz>";
 

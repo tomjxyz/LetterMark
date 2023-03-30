@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 #include <argp.h>
 #include <hpdf.h>
 
@@ -44,6 +46,19 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 
 static struct argp argparse = {options, parse_opt, args_doc, doc};
 
+int allocate_content_memory(char **content)
+{
+	*content = (char *)malloc(MAX_FILE_SIZE + 1);
+	if (*content == NULL)
+	{
+		perror("Error allocating memory for file content");
+		return -1;
+	}
+	else {
+		return 0;
+	}
+}
+
 int read_file(const char *fn, char **content)
 {
 	FILE *file = fopen(fn, "r");
@@ -56,9 +71,7 @@ int read_file(const char *fn, char **content)
     long file_size = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    *content = (char *)malloc(file_size + 1);
-    if (*content == NULL) {
-        perror("Error allocating memory for file content");
+    if (allocate_content_memory(content) == -1) {
         fclose(file);
         return 2;
     }
@@ -85,7 +98,22 @@ int main(int argc, char **argv)
 	argp_parse(&argparse, argc, argv, 0, 0, &args);
 
 	char *content;
-	read_file(args.np_args[0], &content);
+	printf("%s", args.np_args[0]);
+	if (strncmp(args.np_args[0], "-", 1) == 0)
+	{
+		if (allocate_content_memory(&content) == -1)
+			return 1;
+		// Read from stdin
+		if (read(STDIN_FILENO, content, MAX_FILE_SIZE) == -1)
+		{
+			perror("Error reading from STDIN");
+			return 1;
+		}
+	}
+	else
+	{
+		read_file(args.np_args[0], &content);
+	}
 
     lm_compile(content, args.np_args[1]);
 

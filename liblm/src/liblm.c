@@ -13,9 +13,10 @@ int lm_compile(char *input_txt, const char *output_fn)
 {
     HPDF_Doc pdf;
     HPDF_Page page;
-    HPDF_Font font, boldFont, italicFont;
+    HPDF_Font font, boldFont, italicFont, monoFont;
     HPDF_REAL xpos = 50, ypos, page_width, page_height, text_width;
     HPDF_REAL font_size = 12, heading_size = 32, subheading_size = 20.8;
+    HPDF_REAL lfsize = 12;
 
     // Initialize the library and set the error handler
     pdf = HPDF_New(error_handler, NULL);
@@ -29,6 +30,7 @@ int lm_compile(char *input_txt, const char *output_fn)
     font = HPDF_GetFont(pdf, "Times-Roman", NULL);
     boldFont = HPDF_GetFont(pdf, "Times-Bold", NULL);
     italicFont = HPDF_GetFont(pdf, "Times-Italic", NULL);
+    monoFont = HPDF_GetFont(pdf, "Courier", NULL);
 
     // Create the first page
     page = HPDF_AddPage(pdf);
@@ -44,6 +46,7 @@ int lm_compile(char *input_txt, const char *output_fn)
     char *input_copy = strdup(input_txt);
     char *saveptr_line, *saveptr_word;
     char *line = strtok_r(input_copy, "\n", &saveptr_line);
+    char last_tag = '\0';
     while (line) {
         char *word = strtok_r(line, " ", &saveptr_word);
         if (word == NULL)
@@ -58,10 +61,11 @@ int lm_compile(char *input_txt, const char *output_fn)
 
         while (word) {
             printf("word: %s\n", word);
+
             // Wrap words
             text_width = HPDF_Page_TextWidth(page, word);
             if (xpos + text_width > page_width) {
-                ypos -= font_size;
+                ypos -= lfsize;
                 xpos = 50;
 
                 // Add a new page if needed
@@ -85,17 +89,21 @@ int lm_compile(char *input_txt, const char *output_fn)
             // Font size heading
             if (strncmp(word, ".h", 2) == 0 && xpos == 50) {
                 HPDF_Page_SetFontAndSize(page, font, heading_size);
+                lfsize = heading_size;
                 word = strtok_r(NULL, " ", &saveptr_word);
                 new_line = true;
                 continue;
             }
+            else {lfsize = font_size;}
             // Font size subheading
             if (strncmp(word, ".s", 2) == 0 && xpos == 50) {
                 HPDF_Page_SetFontAndSize(page, font, subheading_size);
+                lfsize = subheading_size;
                 word = strtok_r(NULL, " ", &saveptr_word);
                 new_line = true;
                 continue;
             }
+            else {lfsize = font_size;}
             // Change font to bold
             if (strncmp(word, ".b", 2) == 0 && xpos == 50) {
                 HPDF_Page_SetFontAndSize(page, boldFont, font_size);
@@ -117,6 +125,24 @@ int lm_compile(char *input_txt, const char *output_fn)
                 new_line = true;
                 continue;
             }
+            // code block
+            if (strncmp(word, ".c", 2) == 0 && xpos == 50) 
+            {
+                HPDF_Page_SetFontAndSize(page, monoFont, font_size);
+                word = strtok_r(NULL, " ", &saveptr_word);
+                new_line = true;
+                continue;
+            }
+            // block quote grey box around text
+            if (strncmp(word, ".q", 2) == 0 && xpos == 50) 
+            {
+                HPDF_Page_SetRGBFill(page, 0.5, 0.5, 0.5);
+
+                word = strtok_r(NULL, " ", &saveptr_word);
+                new_line = true;
+                continue;
+            }
+
 
             // Print the word to page
             HPDF_Page_TextOut(page, xpos, ypos, word);
@@ -128,7 +154,7 @@ int lm_compile(char *input_txt, const char *output_fn)
         }
 
         line = strtok_r(NULL, "\n", &saveptr_line);
-        ypos -= font_size;
+        ypos -= lfsize;
         xpos = 50;
     }
 

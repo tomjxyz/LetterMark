@@ -37,6 +37,7 @@ LDFLAGS = -L../liblm -llm
 
 # default rule
 all: makedir makelib debug
+	@cp $(TARGET_DEBUG) ../public_html/cgi-bin/lmcomp
 
 # non-phony targets
 $(TARGET): $(OBJ)

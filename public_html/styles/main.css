@@ -47,6 +47,11 @@ button {
     display: block;
 }
 
+.quote{
+    padding: 5px 0px 5px 25px;
+    background-color: #ddd;
+}
+
 
 @media screen and (max-width: 600px) {
     .split-screen {

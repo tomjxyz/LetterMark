@@ -74,7 +74,8 @@ function render() {
             case '.q ':
                 list = false;
                 elm = document.createElement('i');
-                elm.innerText = `   "${text}"`;
+                elm.innerText = text;
+                elm.className = 'quote';
                 break;
             case '.l ':
                 if (!list)

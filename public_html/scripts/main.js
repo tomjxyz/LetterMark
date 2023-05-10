@@ -14,22 +14,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
 function render() {
     oa.innerHTML = '';
     const source = ta.value.split('\n');
-    for (line of source)
+    for (linenum = 0; linenum < source.length; linenum++) 
     {
+        let line = source[linenum];
         let plain = false;
-        // let inline = false;
-        // console.log(line.slice(-1));
-        // if (line.slice(-1) === '\\' && line.slice(-2) !== '\\\\')
-        // {
-        //     line = line.substring(0, line.length - 1);
-        //     inline = true;
-        //     prevInline = true;
-        // }
-        // else if (line.slice(-2) === '\\\\')
-        // {
-        //     line = line.substring(0, line.length - 1);
-        // }
-
 
         let elm, text;
         text = line.substring(3);
@@ -115,6 +103,20 @@ function render() {
                 elm.innerText = line;
             }
         }
+
+        if (line.slice(-1) === '/')
+        {
+            elm.style.display = 'inline';
+            elm.innerText = elm.innerText.slice(0, -1);
+        }
+        if (source.length > 1 && linenum > 0)
+        {
+            if (source[linenum-1].slice(-1) === '/')
+            {
+                elm.style.display = 'inline';
+            }
+        }
+
         if (!list){
             oa.append(elm);
         } else {

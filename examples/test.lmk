@@ -1,13 +1,28 @@
-.h LetterMark
+.h Test Document
 
-This is a note written in lettermark, a markup language designed for taking
-notes quickly.
+.b This is a line in bold.
+.i This is a line in italics.
+.s This is a subheading
 
-The parsing program (lmcomp) quickly takes inputs like this, and turns them into
-PDFs, with many formatting options.
+And this is a link: /
+.a https://ncl.ac.uk
 
-.b This line is bold
-.i This line is italic
 
-Here is a link to the repo:
-.a https://github.com/tomjxyz/LetterMark
+.l UL List item one
+.l UL List item two
+.l UL list item three
+
+.o OL list item one
+.o OL List item two
+.o OL List item three
+
+.m https://placekitten.com/g/200/200
+
+
+.c def add(a, b):
+.c     return a+b
+.c 
+.c if __name__ == "__main__":
+.c     print(add(2,3)) # Prints 5
+
+.q Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

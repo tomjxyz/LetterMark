@@ -1,4 +1,4 @@
-body {
+* {
     margin: 0px;
     font-family: "Libertinus Serif", serif;
 }
@@ -46,6 +46,7 @@ button {
 .render a{
     display: block;
 }
+
 
 @media screen and (max-width: 600px) {
     .split-screen {

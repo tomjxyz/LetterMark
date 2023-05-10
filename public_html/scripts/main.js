@@ -1,5 +1,7 @@
 // Text area and output area variables
 let ta, oa;
+let list = false;
+let listelm;
 
 // Assign once page loaded
 document.addEventListener('DOMContentLoaded', function (e) {
@@ -33,42 +35,71 @@ function render() {
         text = line.substring(3);
         switch (line.substring(0, 3)) {
             case '.b ':
+                list = false;
                 elm = document.createElement('b');
                 elm.innerText = text;
                 break;
             case '.i ':
+                list = false;
                 elm = document.createElement('i');
                 elm.innerText = text;
                 break;
             case '.h ':
+                list = false;
                 elm = document.createElement('h1');
                 elm.innerText = text;
                 break;
             case '.s ':
+                list = false;
                 elm = document.createElement('h3');
                 elm.innerText = text;
                 break;
             case '.a ':
+                list = false;
                 elm = document.createElement('a');
                 elm.innerText = text;
                 elm.href = text;
                 break;
             case '.m ':
+                list = false;
                 elm = document.createElement('img');
                 elm.src = text;
                 break;
             case '.c ':
+                list = false;
                 elm = document.createElement('span');
                 elm.style.fontFamily = 'monospace';
                 elm.innerText = text;
                 break;
             case '.q ':
+                list = false;
                 elm = document.createElement('i');
                 elm.innerText = `   "${text}"`;
                 break;
+            case '.l ':
+                if (!list)
+                {
+                    list = true;
+                    listelm = document.createElement('ul');
+                    oa.append(listelm);
+                }
+                elm = document.createElement('li');
+                elm.innerText = text;
+                break;
+            case '.o ':
+                if (!list)
+                {
+                    list = true;
+                    listelm = document.createElement('ol');
+                    oa.append(listelm);
+                }
+                elm = document.createElement('li');
+                elm.innerText = text;
+                break;              
 
             default:
                 plain = true;
+                list = false;
                 break;
         }
         if (plain)
@@ -83,8 +114,12 @@ function render() {
                 elm.innerText = line;
             }
         }
-        // if (inline) {elm.style.display = 'inline';}
-        oa.append(elm);
+        if (!list){
+            oa.append(elm);
+        } else {
+            listelm.append(elm);
+        }
+
     }
 }
 

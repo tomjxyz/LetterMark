@@ -46,7 +46,7 @@ int lm_compile(char *input_txt, const char *output_fn)
     char *input_copy = strdup(input_txt);
     char *saveptr_line, *saveptr_word;
     char *line = strtok_r(input_copy, "\n", &saveptr_line);
-    char last_tag = '\0';
+    int list = 1;
     while (line) {
         char *word = strtok_r(line, " ", &saveptr_word);
         if (word == NULL)
@@ -59,6 +59,7 @@ int lm_compile(char *input_txt, const char *output_fn)
         HPDF_Page_SetFontAndSize(page, font, font_size);
         HPDF_Page_SetRGBFill(page, 0, 0, 0);
 
+        lfsize = font_size;
         while (word) {
             printf("word: %s\n", word);
 
@@ -94,16 +95,14 @@ int lm_compile(char *input_txt, const char *output_fn)
                 new_line = true;
                 continue;
             }
-            else {lfsize = font_size;}
-            // Font size subheading
-            if (strncmp(word, ".s", 2) == 0 && xpos == 50) {
+            else if (strncmp(word, ".s", 2) == 0 && xpos == 50) {
                 HPDF_Page_SetFontAndSize(page, font, subheading_size);
                 lfsize = subheading_size;
                 word = strtok_r(NULL, " ", &saveptr_word);
                 new_line = true;
                 continue;
             }
-            else {lfsize = font_size;}
+
             // Change font to bold
             if (strncmp(word, ".b", 2) == 0 && xpos == 50) {
                 HPDF_Page_SetFontAndSize(page, boldFont, font_size);
@@ -140,6 +139,27 @@ int lm_compile(char *input_txt, const char *output_fn)
 
                 word = strtok_r(NULL, " ", &saveptr_word);
                 new_line = true;
+                continue;
+            }
+            // unordered list
+            if (strncmp(word, ".l", 2) == 0 && xpos == 50)
+            {
+                HPDF_Page_TextOut(page, xpos, ypos, "•");
+                xpos += HPDF_Page_TextWidth(page, "•");
+                word = strtok_r(NULL, " ", &saveptr_word);
+                new_line = true;
+                continue;
+            }
+            // ordered list
+            if (strncmp(word, ".o", 2) == 0 && xpos == 50)
+            {
+                char list_num[10];
+                sprintf(list_num, "%d. ", list);
+                HPDF_Page_TextOut(page, xpos, ypos, list_num);
+                xpos += HPDF_Page_TextWidth(page, list_num);
+                word = strtok_r(NULL, " ", &saveptr_word);
+                new_line = true;
+                list++;
                 continue;
             }
 
